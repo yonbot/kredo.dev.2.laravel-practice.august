@@ -42,4 +42,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    # User has one phone number
+    # Use phone() to get the phone number of a user.
+    public function phone()
+    {
+        return $this->hasOne(Phone::class);
+    }
+
+    # Use posts() to get the posts of the user
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

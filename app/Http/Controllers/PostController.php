@@ -14,84 +14,93 @@ class PostController extends Controller
         $this->post = $post;
     }
 
+    public function show($post_id)
+    {
+        $post = $this->post->findOrFail($post_id);
+
+        return view('posts.show')->with('post', $post);
+    }
+
     #CREATE
     public function save()
     {
-        //$post = new Post;
-        $this->post->title = "This is Another Post";
-        $this->post->content = "Testing Post";
-        $this->post->save();
+        $post = new Post;
+        $post->title    = "This is Another Post";
+        $post->content  = "Testing post";
+        $post->save();
+        //INSERT INTO posts(title, content) VALUES ('Laravel 10 Release', 'As you may know, we updated the Laravel release cycle.')
 
-        // save also be used to update model
-
-        //Insert Into post(title, content) values('Laravel 10 Release', 'As you may know, we updated the Laravel relase cycle.');
         return "New post saved successfully!";
     }
 
     public function create()
     {
-        //$post = New Post;
+        $post = new Post;
 
-        // mass assignment
         $new_post = [
-            'title' => 'How to Stay Productive',
-            'content' => 'To be truly productive, you must first set your goal.'
+            'title'     => 'How to Stay Productive',
+            'content'   => 'To be truly productive, you must first set your goals.'
         ];
 
-        $this->post->create($new_post);
+        $post->create($new_post);
         return "New post saved!";
     }
 
     #READ
     public function index()
     {
-        //$post_m = new Post;
-        $all_posts = $this->post->all(); // SELECT * FROM posts
-        /*
-            $all_posts = [
-                [
-                    'id' => 1,
-                    'title' => 'Laravel 10 Release',
-                    'content' => 'As you may know, we updated'
-                ],
-                [
-                    'id' => 2,
-                    'title' => 'How to Stay Productive',
-                    'content' => 'To be truly productive, you must first set goal.'
-                ]
-            ];
+        $post_m = new Post;
+
+        $all_posts = $post_m->all();
+        //SELECT * FROM posts
+        /* $all_posts = [
+            [
+                'id'        => 1,
+                'title'     => 'Laravel 10 Release',
+                'content'   => 'As you may know, we updated the Laravel release cycle.' 
+            ],
+            [
+                'id'        => 2,
+                'title'     => 'How to Stay Productive',
+                'content'   => 'To be truly productive, you must first set your goals.'
+            ]
+        ];
         */
 
         foreach ($all_posts as $post) {
-            echo "Title: $post->title";
+            echo "TITLE: $post->title";
             echo "<br>";
             echo $post->content;
             echo "<hr>";
         }
     }
 
-    public function show($post_id)
-    {
-        //$post_m = New Post;
+    // public function show($post_id)
+    // {
+    //     $post_m = new Post;
 
-        $post = $this->post->findOrFail($post_id);
-        // SELECT * FROM posts WHERE id = $post_id
-        // Only looking for an id
-        // throw exception.
+    //     $post =  $post_m->findOrFail($post_id);
+    //     // SELECT * FROM posts WHERE id = $post_id
 
-        echo "Title: $post->title";
-        echo "<br>";
-        echo $post->content;
-    }
+    //     echo "Title: $post->title";
+    //     echo "<br>";
+    //     echo $post->content;
+    // }
 
     public function showWhere($post_id)
     {
-        //$post_m = new Post;
+        $post_m = new Post;
 
-        //$post = $this->post->where('id', $post_id)->get();
-        //$post = $this->post->where('id', '>', $post_id)->get();
-        //$post = $this->post->where('title', 'like', '%10%')->get();
-        $post = $this->post->orderBy('title', 'desc')->take(1)->get();
+        // $post = $post_m->where('id', $post_id)->get();
+        // SELECT * FROM posts WHERE id = $post_id
+
+        // $post = $post_m->where('id', '<', $post_id)->get();
+        // SELECT * FROM posts WHERE id > $post_id
+
+        // $post = $post_m->where('title', 'like', '%P%')->get();
+        // SELECT * FROM posts WHERE title like '%P%'
+
+        $post = $post_m->orderBy('title', 'desc')->get();
 
         foreach ($post as $p) {
             echo "Title: $p->title";
@@ -100,33 +109,6 @@ class PostController extends Controller
             echo "<hr>";
         }
     }
-
-    public function update($post_id)
-    {
-        //$post_obj = new Post;
-        $post_details = $this->post->findOrFail($post_id);
-        $post_details->title = "New Title";
-        $post_details->content = "New Content";
-
-        $post_details->save();
-
-        return "Post " . $post_id . " is updated!";
-    }
-
-    public function destroy($post_id)
-    {
-        //$post_m = new Post;
-
-        $this->post->destroy($post_id);
-
-        // $post_m->destroy(4, 5, 6);
-
-        // $ids = [7, 8, 9];
-        // $post_m->destroy($ids);
-
-        return $post_id . " is deleted";
-    }
-
 
     public function viewPost($post_id)
     {
@@ -150,24 +132,9 @@ class PostController extends Controller
             'How to Stay Productive',
             'Coding during a Pandemic'
         ];
-        //$post_titles = [];
+        // $post_titles = [];
 
         return view('view-all')
             ->with('post_titles', $post_titles);
     }
-
-    // public function show($username)
-    // {
-    //     $post_titles = [
-    //         'How to Make French Toast',
-    //         'Japanese Cheesecake Recipe',
-    //         'How to Cook Steak',
-    //         'The Best Places in Tokyo for Shokkupan Bread',
-    //         'Cambodian Style Fried Chicken Wings'
-    //     ];
-
-    //     return view('show')
-    //             ->with('username', $username)
-    //             ->with('post_titles', $post_titles);
-    // }
 }

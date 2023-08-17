@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PhoneController;
+use App\Models\Post;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,13 @@ use App\Http\Controllers\PostController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+/** Eloquent Relationships */
+// One to One
+Route::get('/user/{id}/show', [UserController::class, 'show']);
+Route::get('/phone/{id}/show', [PhoneController::class, 'showUserInfo']);
+// One to Many (inverse)
+Route::get('/post/{id}/show', [PostController::class, 'show']);
 
 /** Eloquent */
 #CREATE
